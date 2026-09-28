@@ -1,0 +1,29 @@
+name: CI Piepeline Test
+
+on:
+   push:
+      branches: [  main  ]
+    
+   pull_request : 
+       branches : [ main ]
+
+jobs:
+  build:
+     runs-on: ubuntu-latest
+     strategy: 
+        matrix: 
+           java: [  '17'  ] 
+     
+     
+     steps:
+     - uses: actions/checkout@v4
+     - name: set up JDK ${{matrix.java}}
+       uses: actions/java-setup@v4
+       with:
+          java-version: ${{matrix.java}}
+          distribution: 'adopt'
+          cache: maven
+     - name: Setup Gradle
+       uses: gradle/actions/setup-gradle@v4
+     - name: build with Gradle
+       run: ./gradlew build
